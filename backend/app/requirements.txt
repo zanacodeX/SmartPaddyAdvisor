@@ -4,4 +4,8 @@ numpy
 scikit-learn
 joblib
 flask-cors
-#new
+flask-jwt-extended
+flask-sqlalchemy
+passlib
+pymysql
+python-dotenv
