@@ -10,6 +10,7 @@ MODEL_FOLDER = os.path.join(os.path.dirname(__file__), "..","..", "model")
 model_numeric = joblib.load(os.path.join(MODEL_FOLDER, "paddy_model_numeric.pkl"))
 model_text = joblib.load(os.path.join(MODEL_FOLDER, "paddy_model_text.pkl"))
 label_encoders = joblib.load(os.path.join(MODEL_FOLDER, "label_encoders.pkl"))
+scaler = joblib.load(os.path.join(MODEL_FOLDER, "scaler.pkl"))
 
 # -----------------------------
 # Fertilizer calculation
@@ -40,8 +41,11 @@ def get_prediction_results(data):
         "Humidity_%": float(data["humidity"])
     }])
 
+    # Scale input features (models were trained on scaled data)
+    input_scaled = scaler.transform(input_df)
+
     # Numeric predictions
-    numeric_pred = model_numeric.predict(input_df)[0]
+    numeric_pred = model_numeric.predict(input_scaled)[0]
     numeric_cols = [
         "PredictedYield_kg_ha", "PloughDepth_cm", "SoilAdjustment_kgLime",
         "SeedAmount_kg", "PlantSpacing_cm", "Fertilizer_Basal_Urea_kg",
@@ -52,7 +56,7 @@ def get_prediction_results(data):
     numeric_result = dict(zip(numeric_cols, [round(x, 2) for x in numeric_pred]))
 
     # Text predictions
-    text_pred_encoded = model_text.predict(input_df)
+    text_pred_encoded = model_text.predict(input_scaled)
     text_result = {}
     for i, col in enumerate(label_encoders.keys()):
         text_result[col] = label_encoders[col].inverse_transform([text_pred_encoded[0][i]])[0]
