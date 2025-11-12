@@ -28,3 +28,45 @@ class User(db.Model):
             'email': self.email,
             'role': self.role
         }
+
+
+class Prediction(db.Model):
+    __tablename__ = 'predictions'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    temperature = db.Column(db.Float, nullable=False)
+    soil_ph = db.Column(db.Float, nullable=False)
+    rainfall = db.Column(db.Float, nullable=False)
+    field_area = db.Column(db.Float, nullable=False)
+    humidity = db.Column(db.Float, nullable=False)
+
+    predicted_yield_kg_ha = db.Column(db.Float)
+    plough_depth_cm = db.Column(db.Float)
+    soil_adjustment_kg_lime = db.Column(db.Float)
+    seed_amount_kg = db.Column(db.Float)
+    plant_spacing_cm = db.Column(db.Float)
+    fertilizer_basal_urea_kg = db.Column(db.Float)
+    fertilizer_basal_tsp_kg = db.Column(db.Float)
+    fertilizer_basal_mop_kg = db.Column(db.Float)
+    fertilizer_2nd_dose_urea_kg = db.Column(db.Float)
+    fertilizer_2nd_dose_tsp_kg = db.Column(db.Float)
+    fertilizer_2nd_dose_mop_kg = db.Column(db.Float)
+    final_moisture_pct = db.Column(db.Float)
+
+    plough_method = db.Column(db.String(50))
+    irrigation_advice = db.Column(db.String(255))
+    water_management_advice_stage4 = db.Column(db.String(255))
+    tiller_increase_tip = db.Column(db.String(255))
+    water_control_advice_stage5 = db.Column(db.String(255))
+    water_control_advice_stage6 = db.Column(db.String(255))
+    pesticide_suggestion = db.Column(db.String(255))
+    water_level_advice_stage7 = db.Column(db.String(255))
+    harvesting_date = db.Column(db.String(50))
+    post_harvest_advice = db.Column(db.String(255))
+
+    tsp_kg = db.Column(db.Float)
+    mop_kg = db.Column(db.Float)
+    urea_kg = db.Column(db.Float)
+
+    created_at = db.Column(db.DateTime, server_default=db.func.now())

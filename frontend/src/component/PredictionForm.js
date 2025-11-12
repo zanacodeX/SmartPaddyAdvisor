@@ -11,18 +11,18 @@ function PredictionForm() {
   });
 
   const [result, setResult] = useState(null);
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
 
   // Handle input changes
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // Handle form submission
+  // Submit prediction
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      // Convert form values to numbers before sending
       const numericForm = Object.fromEntries(
         Object.entries(form).map(([key, value]) => [key, Number(value)])
       );
@@ -30,15 +30,35 @@ function PredictionForm() {
       const res = await axios.post("http://127.0.0.1:5000/predict", numericForm);
       setResult(res.data);
     } catch (error) {
-      console.error("Error:", error);
+      console.error(error);
       alert("Failed to connect to backend.");
     }
   };
 
- // Group numeric and text results by stages
+  // Save prediction to DB
+  const handleSave = async () => {
+    if (!result) return alert("No prediction to save");
+
+    try {
+      await axios.post("http://127.0.0.1:5000/api/save_prediction", {
+        user_id: user.id,
+        prediction: {
+          ...form,
+          ...result.numeric,
+          ...result.text,
+          ...(result.fertilizer || {}),
+        },
+      });
+      alert("Prediction saved successfully!");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to save prediction");
+    }
+  };
+
+  // Group results for display
   const getStageResults = () => {
     if (!result) return [];
-
     const { numeric, text, fertilizer } = result;
 
     return [
@@ -139,7 +159,6 @@ function PredictionForm() {
             </div>
           ))}
 
-          {/* Fertilizer Recommendations */}
           {result?.fertilizer && (
             <div>
               <h4>💊 Fertilizer Recommendation</h4>
@@ -150,6 +169,21 @@ function PredictionForm() {
               </ul>
             </div>
           )}
+
+          <button
+            onClick={handleSave}
+            style={{
+              padding: "10px 20px",
+              backgroundColor: "#2196F3",
+              color: "white",
+              border: "none",
+              borderRadius: "5px",
+              cursor: "pointer",
+              marginTop: "10px"
+            }}
+          >
+            Save Prediction
+          </button>
         </div>
       )}
     </div>
