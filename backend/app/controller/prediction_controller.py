@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from ..service.prediction_service import predict_paddy
 
-api = Blueprint('api', __name__)
+api = Blueprint('', __name__)
 
 @api.route("/predict", methods=["POST"])
 def predict():
