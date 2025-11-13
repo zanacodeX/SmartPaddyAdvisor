@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Container, Navbar, Nav, Button, Card, Alert, Form } from 'react-bootstrap';
 import axiosInstance from '../api/axiosInstance';
 import PredictionForm from '../component/PredictionForm'; 
+import PredictionHistory from "../component/PredictionHistory";
 
 export default function UserPortal() {
   const navigate = useNavigate();
@@ -67,7 +68,7 @@ export default function UserPortal() {
               <h5 className="mb-0">Your Prediction History</h5>
             </Card.Header>
             <Card.Body>
-              <p className="text-muted">Prediction history coming soon...</p>
+              <PredictionHistory />
             </Card.Body>
           </Card>
         )}

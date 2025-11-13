@@ -1,6 +1,8 @@
 import pandas as pd
 import joblib
 import os
+from app.models import Prediction
+from app import db
 
 # -----------------------------
 # Load trained models once
@@ -69,3 +71,23 @@ def get_prediction_results(data):
         "text": text_result,
         "fertilizer": fertilizer
     }
+
+def get_user_predictions(user_id):
+    """Return all predictions for a given user_id."""
+    try:
+        # Ensure user_id is int (JWT sometimes returns string)
+        user_id = int(user_id)
+
+        predictions = (
+            Prediction.query
+            .filter_by(user_id=user_id)
+            .order_by(Prediction.created_at.desc())
+            .all()
+        )
+
+        return [p.to_dict() for p in predictions]
+
+    except Exception as e:
+        db.session.rollback()
+        print("🔥 Error in get_user_predictions:", e)
+        raise e
