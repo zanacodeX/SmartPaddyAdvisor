@@ -1,7 +1,8 @@
 from flask import Blueprint, request, jsonify
-from app.service.prediction_service import get_prediction_results
+from app.service.prediction_service import get_prediction_results, get_user_predictions
 from app import db
 from app.models import Prediction, User
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 api = Blueprint('api', __name__)
 
@@ -74,3 +75,28 @@ def save_prediction():
     db.session.add(prediction)
     db.session.commit()
     return jsonify({"message": "Prediction saved successfully"}), 201
+
+@api.route('/api/predictions_by_user/<int:user_id>', methods=['GET'])
+
+def get_predictions_by_user(user_id):
+    try:
+        predictions = get_user_predictions(user_id)
+
+        safe_predictions = []
+        for p in predictions:
+            safe_predictions.append({
+                'id': p.get('id'),
+                'temperature': p.get('temperature'),
+                'soil_ph': p.get('soil_ph'),
+                'rainfall': p.get('rainfall'),
+                'field_area': p.get('field_area'),
+                'predicted_yield_kg_ha': p.get('predicted_yield_kg_ha'),
+                'harvesting_date': p.get('harvesting_date') or "N/A",
+                'created_at': p.get('created_at') or "N/A",
+            })
+
+        return jsonify(safe_predictions), 200
+
+    except Exception as e:
+        print("🔥 Error fetching predictions by user:", e)
+        return jsonify({"error": "Failed to load predictions."}), 500

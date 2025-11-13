@@ -1,5 +1,6 @@
 from app import db
 from passlib.context import CryptContext
+from datetime import datetime
 
 # Password hashing context
 pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
@@ -70,3 +71,17 @@ class Prediction(db.Model):
     urea_kg = db.Column(db.Float)
 
     created_at = db.Column(db.DateTime, server_default=db.func.now())
+
+    def to_dict(self):
+        """Convert prediction record to dictionary for JSON response"""
+        return {
+            'id': self.id,
+            'temperature': self.temperature,
+            'soil_ph': self.soil_ph,
+            'rainfall': self.rainfall,
+            'field_area': self.field_area,
+            'humidity': self.humidity,
+            'predicted_yield_kg_ha': self.predicted_yield_kg_ha,
+            'harvesting_date': self.harvesting_date or "N/A",
+            'post_harvest_advice': self.post_harvest_advice,
+            'created_at': self.created_at.strftime("%Y-%m-%d %H:%M:%S") if self.created_at else "N/A",}
