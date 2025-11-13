@@ -16,7 +16,8 @@ function PredictionHistory() {
       }
 
       try {
-        const res = await axios.get(`http://127.0.0.1:5000/api/predictions_by_user/${user.id}`);
+        const user = JSON.parse(localStorage.getItem("user") || "{}");
+        const res = await axios.get(`http://127.0.0.1:5000/api/predictions?user_id=${user.id}`);
         if (Array.isArray(res.data)) {
           setHistory(res.data);
         } else if (res.data.error) {
