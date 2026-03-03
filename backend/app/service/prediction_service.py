@@ -34,34 +34,85 @@ def get_prediction_results(data):
     """
     Input: dictionary from frontend
     Output: numeric + text + fertilizer predictions
+    This function validates inputs, scales them, and handles varying model output shapes
+    to avoid runtime errors that lead to 500 responses.
     """
-    input_df = pd.DataFrame([{
-        "Temperature_C": float(data["temperature"]),
-        "Soil_pH": float(data["soil_ph"]),
-        "Rainfall_mm": float(data["rainfall"]),
-        "FieldArea_ha": float(data["field_area"]),
-        "Humidity_%": float(data["humidity"])
-    }])
+    required_keys = ["temperature", "soil_ph", "rainfall", "field_area", "humidity"]
+    for k in required_keys:
+        if k not in data:
+            raise KeyError(f"Missing input key: {k}")
+
+    try:
+        input_df = pd.DataFrame([{
+            "Temperature_C": float(data["temperature"]),
+            "Soil_pH": float(data["soil_ph"]),
+            "Rainfall_mm": float(data["rainfall"]),
+            "FieldArea_ha": float(data["field_area"]),
+            "Humidity_%": float(data["humidity"])
+        }])
+    except Exception as e:
+        raise ValueError(f"Invalid input values: {e}")
 
     # Scale input features (models were trained on scaled data)
-    input_scaled = scaler.transform(input_df)
+    try:
+        input_scaled = scaler.transform(input_df)
+    except Exception as e:
+        raise RuntimeError(f"Failed to scale input features: {e}")
 
-    # Numeric predictions
-    numeric_pred = model_numeric.predict(input_scaled)[0]
-    numeric_cols = [
+    # Numeric predictions — handle different output shapes robustly
+    try:
+        numeric_pred_raw = model_numeric.predict(input_scaled)
+    except Exception as e:
+        raise RuntimeError(f"Numeric model prediction failed: {e}")
+
+    # Ensure 2D array (n_samples, n_targets)
+    if hasattr(numeric_pred_raw, 'ndim') and numeric_pred_raw.ndim == 1:
+        numeric_pred = numeric_pred_raw.reshape(1, -1)
+    else:
+        numeric_pred = numeric_pred_raw
+
+    pred_row = numeric_pred[0]
+
+    expected_numeric_cols = [
         "PredictedYield_kg_ha", "PloughDepth_cm", "SoilAdjustment_kgLime",
         "SeedAmount_kg", "PlantSpacing_cm", "Fertilizer_Basal_Urea_kg",
         "Fertilizer_Basal_TSP_kg", "Fertilizer_Basal_MOP_kg",
         "Fertilizer_2ndDose_Urea_kg", "Fertilizer_2ndDose_TSP_kg",
-        "Fertilizer_2ndDose_MOP_kg", "FinalMoisture_%"
+        "Fertilizer_2ndDose_MOP_kg"
     ]
-    numeric_result = dict(zip(numeric_cols, [round(x, 2) for x in numeric_pred]))
+
+    # If model returns more outputs than expected, create placeholder names
+    if len(pred_row) > len(expected_numeric_cols):
+        extra = [f"extra_numeric_{i+1}" for i in range(len(pred_row) - len(expected_numeric_cols))]
+        numeric_cols = expected_numeric_cols + extra
+    else:
+        numeric_cols = expected_numeric_cols[:len(pred_row)]
+
+    numeric_result = dict(zip(numeric_cols, [round(float(x), 2) for x in pred_row]))
 
     # Text predictions
-    text_pred_encoded = model_text.predict(input_scaled)
+    try:
+        text_pred_encoded = model_text.predict(input_scaled)
+    except Exception as e:
+        raise RuntimeError(f"Text model prediction failed: {e}")
+
+    # Normalize shape
+    if hasattr(text_pred_encoded, 'ndim') and text_pred_encoded.ndim == 1:
+        text_pred = text_pred_encoded.reshape(1, -1)
+    else:
+        text_pred = text_pred_encoded
+
     text_result = {}
-    for i, col in enumerate(label_encoders.keys()):
-        text_result[col] = label_encoders[col].inverse_transform([text_pred_encoded[0][i]])[0]
+    try:
+        for i, col in enumerate(label_encoders.keys()):
+            # guard against index errors
+            if i >= text_pred.shape[1]:
+                text_result[col] = None
+            else:
+                encoded = int(text_pred[0][i])
+                text_result[col] = label_encoders[col].inverse_transform([encoded])[0]
+    except Exception as e:
+        raise RuntimeError(f"Decoding text predictions failed: {e}")
 
     # Fertilizer calculation
     fertilizer = calculate_fertilizer(float(data["soil_ph"]), float(data["field_area"]))
