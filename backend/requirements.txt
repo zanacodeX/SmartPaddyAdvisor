@@ -2,6 +2,11 @@ Flask
 pandas
 numpy
 scikit-learn
+scikit-image
+Pillow
 joblib
 flask-cors
-#traing
+python-dotenv
+flask-sqlalchemy
+pymysql
+flask-jwt-extended

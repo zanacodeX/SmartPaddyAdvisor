@@ -4,6 +4,7 @@ import { Container, Navbar, Nav, Button, Card, Alert, Form } from 'react-bootstr
 import axiosInstance from '../api/axiosInstance';
 import PredictionForm from '../component/PredictionForm'; 
 import PredictionHistory from "../component/PredictionHistory";
+import DiseaseDetection from '../component/DiseaseDetection';
 
 export default function UserPortal() {
   const navigate = useNavigate();
@@ -43,6 +44,13 @@ export default function UserPortal() {
             Make Prediction
           </Button>
           <Button
+            variant={activeTab === 'detection' ? 'success' : 'outline-success'}
+            className="me-2"
+            onClick={() => setActiveTab('detection')}
+          >
+            Disease Detection
+          </Button>
+          <Button
             variant={activeTab === 'history' ? 'success' : 'outline-success'}
             onClick={() => setActiveTab('history')}
           >
@@ -58,6 +66,14 @@ export default function UserPortal() {
             </Card.Header>
             <Card.Body>
               <PredictionForm />
+            </Card.Body>
+          </Card>
+        )}
+
+        {activeTab === 'detection' && (
+          <Card className="shadow">
+            <Card.Body>
+              <DiseaseDetection />
             </Card.Body>
           </Card>
         )}

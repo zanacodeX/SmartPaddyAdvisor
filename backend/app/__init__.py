@@ -37,24 +37,30 @@ def create_app():
     # Register blueprints
     from app.controller.yield_controller import api as yield_api
     from app.controller.auth_controller import auth as auth_api
+    from app.controller.disease_detection_controller import api as disease_api
     
     app.register_blueprint(yield_api)
     app.register_blueprint(auth_api, url_prefix='/auth')
+    app.register_blueprint(disease_api, url_prefix='/api')
     
     # Create database tables and seed admin
     with app.app_context():
-        from app.models import User
-        db.create_all()
-        
-        # Seed admin user if no users exist
-        if User.query.count() == 0:
-            admin = User(
-                email=os.getenv('ADMIN_EMAIL', 'admin@example.com'),
-                role='admin'
-            )
-            admin.set_password(os.getenv('ADMIN_PASSWORD', 'Password123'))
-            db.session.add(admin)
-            db.session.commit()
-            print(f"✓ Seeded admin user: {admin.email}")
+        try:
+            from app.models import User
+            db.create_all()
+            
+            # Seed admin user if no users exist
+            if User.query.count() == 0:
+                admin = User(
+                    email=os.getenv('ADMIN_EMAIL', 'admin@example.com'),
+                    role='admin'
+                )
+                admin.set_password(os.getenv('ADMIN_PASSWORD', 'Password123'))
+                db.session.add(admin)
+                db.session.commit()
+                print(f"✓ Seeded admin user: {admin.email}")
+        except Exception as db_error:
+            print(f"⚠️  Database connection warning: {db_error}")
+            print(f"⚠️  Disease Detection API will still work without database")
     
     return app
