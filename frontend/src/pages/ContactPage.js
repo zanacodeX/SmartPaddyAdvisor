@@ -80,8 +80,8 @@ export default function ContactPage() {
               <h5>📍 Address</h5>
               <p>
                 Smart Paddy Advisor<br />
-                Agricultural Technology Hub<br />
-                123 Farmer Lane<br />
+                Agricultural Tec Hub<br />
+                Rathnapura<br />
                 Sri Lanka
               </p>
             </div>
@@ -89,8 +89,8 @@ export default function ContactPage() {
             <div className="mb-4">
               <h5>📞 Phone</h5>
               <p>
-                <a href="tel:+94112345678">+94 11 234 5678</a><br />
-                <a href="tel:+94761234567">+94 76 123 4567</a> (Mobile)
+                <a href="tel:+94767714341">+94 76 771 4341</a><br />
+                <a href="tel:+94773419080">+94 77 341 9080</a> (Mobile)
               </p>
             </div>
 
