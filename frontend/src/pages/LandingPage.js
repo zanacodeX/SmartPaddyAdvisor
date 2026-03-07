@@ -43,39 +43,7 @@ export default function LandingPage() {
         </Button>
       </Container>
 
-      {/* About section */}
-      <Container className="my-5">
-        <h2>About</h2>
-        <p>
-          Smart Paddy Advisor helps farmers predict paddy yield based on multiple parameters
-          including weather, soil conditions, and historical data. Our platform provides
-          personalized recommendations to increase productivity and reduce waste.
-        </p>
-        <Button variant="outline-success" onClick={() => navigate('/about')}>Learn More</Button>
-      </Container>
-
-      {/* How it works */}
-      <Container className="my-5">
-        <h2>How it works</h2>
-        <p>
-          Follow our simple 5-step process to get started with yield predictions and smart
-          recommendations for your paddy farm.
-        </p>
-        <ol>
-          <li>Create an account or login.</li>
-          <li>Provide details about your field and current conditions.</li>
-          <li>Receive yield predictions and actionable advice.</li>
-        </ol>
-        <Button variant="outline-success" onClick={() => navigate('/how-it-works')}>See Full Details</Button>
-      </Container>
-
-      {/* Contact section */}
-      <Container className="my-5">
-        <h2>Contact Us</h2>
-        <p>Have questions or need support? We're here to help. Get in touch with our team anytime.</p>
-        <Button variant="outline-success" onClick={() => navigate('/contact')}>Contact Us</Button>
-      </Container>
-
+      
       {/* Footer */}
       <footer className="bg-dark text-white py-3">
         <Container className="text-center">

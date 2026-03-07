@@ -105,7 +105,7 @@ export default function HowItWorksPage() {
                 </div>
                 <Card.Title>Get AI Predictions</Card.Title>
                 <Card.Text>
-                  Our advanced AI models analyze your data and provide accurate yield predictions for your paddy crop.
+                  Our advanced AI models analyze your data and provide accurate yield predictions and advice for your paddy crop.
                 </Card.Text>
               </Card.Body>
             </Card>
@@ -124,6 +124,22 @@ export default function HowItWorksPage() {
                 <Card.Title>Receive Recommendations</Card.Title>
                 <Card.Text>
                   Get actionable insights and recommendations to optimize your farming practices and maximize yield.
+                </Card.Text>
+              </Card.Body>
+            </Card>
+          </Col>
+       
+          <Col md={6} className="mx-auto">
+            <Card className="shadow-sm h-100">
+              <Card.Body>
+                <div className="mb-3">
+                  <span className="badge bg-success" style={{ fontSize: '1.5rem', padding: '10px 15px' }}>
+                    6
+                  </span>
+                </div>
+                <Card.Title>Detect disease using image</Card.Title>
+                <Card.Text>
+                  Get actionable insights and recommendations for identify disease using image of leaf.
                 </Card.Text>
               </Card.Body>
             </Card>
