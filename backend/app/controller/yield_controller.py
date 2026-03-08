@@ -76,6 +76,15 @@ def save_prediction():
     db.session.commit()
     return jsonify({"message": "Prediction saved successfully"}), 201
 
+@api.route('/api/predictions/<int:prediction_id>', methods=['DELETE'])
+def delete_prediction(prediction_id):
+    prediction = Prediction.query.get(prediction_id)
+    if not prediction:
+        return jsonify({"error": "Prediction not found"}), 404
+    db.session.delete(prediction)
+    db.session.commit()
+    return jsonify({"message": "Prediction deleted successfully"}), 200
+
 @api.route('/api/predictions', methods=['GET'])
 def get_predictions():
     """
@@ -105,24 +114,9 @@ def get_predictions():
         except (ValueError, TypeError):
             return jsonify({"error": f"Invalid user ID: {user_id}"}), 422
 
-        # Fetch predictions
-        predictions = get_user_predictions(user_id)
+        predictions = Prediction.query.filter_by(user_id=user_id).order_by(Prediction.created_at.desc()).all()
 
-        # Safely handle null values
-        safe_predictions = []
-        for p in predictions:
-            safe_predictions.append({
-                "id": p.get("id"),
-                "temperature": p.get("temperature"),
-                "soil_ph": p.get("soil_ph"),
-                "rainfall": p.get("rainfall"),
-                "field_area": p.get("field_area"),
-                "predicted_yield_kg_ha": p.get("predicted_yield_kg_ha"),
-                "harvesting_date": p.get("harvesting_date") or "N/A",
-                "created_at": p.get("created_at") or "N/A",
-            })
-
-        return jsonify(safe_predictions), 200
+        return jsonify([p.to_dict() for p in predictions]), 200
 
     except Exception as e:
         print("🔥 Error fetching predictions:", e)

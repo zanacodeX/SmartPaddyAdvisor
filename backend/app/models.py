@@ -79,15 +79,50 @@ class Prediction(db.Model):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
 
     def to_dict(self):
-        """Convert prediction record to dictionary for JSON response"""
         return {
-            'id': self.id,
-            'temperature': self.temperature,
-            'soil_ph': self.soil_ph,
-            'rainfall': self.rainfall,
-            'field_area': self.field_area,
-            'humidity': self.humidity,
-            'predicted_yield_kg_ha': self.predicted_yield_kg_ha,
-            'harvesting_date': self.harvesting_date or "N/A",
-            'post_harvest_advice': self.post_harvest_advice,
-            'created_at': self.created_at.strftime("%Y-%m-%d %H:%M:%S") if self.created_at else "N/A",}
+        'id': self.id,
+        'temperature': self.temperature,
+        'soil_ph': self.soil_ph,
+        'rainfall': self.rainfall,
+        'field_area': self.field_area,
+        'humidity': self.humidity,
+
+        # Stage 1 — Land Preparation
+        'plough_depth_cm': self.plough_depth_cm,
+        'plough_method': self.plough_method,
+        'soil_adjustment_kg_lime': self.soil_adjustment_kg_lime,
+        'irrigation_advice': self.irrigation_advice,
+
+        # Stage 2 — Seed & Planting
+        'seed_amount_kg': self.seed_amount_kg,
+        'plant_spacing_cm': self.plant_spacing_cm,
+
+        # Stage 3 — Basal Fertilization
+        'fertilizer_basal_urea_kg': self.fertilizer_basal_urea_kg,
+        'fertilizer_basal_tsp_kg': self.fertilizer_basal_tsp_kg,
+        'fertilizer_basal_mop_kg': self.fertilizer_basal_mop_kg,
+
+        # Stage 4,5,6 — Water & Growth
+        'water_management_advice_stage4': self.water_management_advice_stage4,
+        'tiller_increase_tip': self.tiller_increase_tip,
+        'fertilizer_2nddose_urea_kg': self.fertilizer_2nd_dose_urea_kg,
+        'fertilizer_2nddose_tsp_kg': self.fertilizer_2nd_dose_tsp_kg,
+        'fertilizer_2nddose_mop_kg': self.fertilizer_2nd_dose_mop_kg,
+        'water_control_advice_stage5': self.water_control_advice_stage5,
+        'water_control_advice_stage6': self.water_control_advice_stage6,
+        'pesticide_suggestion': self.pesticide_suggestion,
+
+        # Stage 7 — Harvest
+        'water_level_advice_stage7': self.water_level_advice_stage7,
+        'predicted_yield_kg_ha': self.predicted_yield_kg_ha,
+        'harvesting_date': self.harvesting_date or "N/A",
+        'final_moisture_percent': self.final_moisture_pct,
+        'post_harvest_advice': self.post_harvest_advice,
+
+        # Fertilizer summary
+        'tsp_kg': self.tsp_kg,
+        'mop_kg': self.mop_kg,
+        'urea_kg': self.urea_kg,
+
+        'created_at': self.created_at.strftime("%Y-%m-%d %H:%M:%S") if self.created_at else "N/A",
+    }
