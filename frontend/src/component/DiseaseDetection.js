@@ -97,7 +97,7 @@ export default function DiseaseDetection() {
     <Container className="detection-container">
       <Row className="mb-4">
         <Col>
-          <h2>🌾 Rice Leaf Disease Detection</h2>
+          <h2> Rice Leaf Disease Detection</h2>
           <p className="text-muted">Upload an image of a rice leaf to detect diseases</p>
         </Col>
       </Row>
