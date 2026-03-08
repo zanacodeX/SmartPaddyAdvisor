@@ -97,7 +97,7 @@ function PredictionForm() {
           { label: "WaterControlAdvice_Stage5", value: text?.WaterControlAdvice_Stage5 },
           { label: "WaterControlAdvice_Stage6", value: text?.WaterControlAdvice_Stage6 },
           { label: "PesticideSuggestion", value: text?.PesticideSuggestion },
-          { label: "HumidityTarget_%", value: numeric?.["Humidity_%"] || form.humidity },
+          { label: "HumidityTarget_%", value: numeric?.["HumidityTarget_%"] || form.humidity },
         ],
       },
       {
