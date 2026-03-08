@@ -1,15 +1,24 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container, Navbar, Nav, Button, Card, Alert, Form } from 'react-bootstrap';
+import { Container, Navbar, Nav, Button, Card, Alert, Form, Modal } from 'react-bootstrap'; // ✅ CHANGE 1: Added Modal
 import axiosInstance from '../api/axiosInstance';
 import PredictionForm from '../component/PredictionForm'; 
 import PredictionHistory from "../component/PredictionHistory";
 import DiseaseDetection from '../component/DiseaseDetection';
+import UserProfile from '../component/UserProfile'; // ✅ CHANGE 2: New import
 
 export default function UserPortal() {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   const [activeTab, setActiveTab] = useState('prediction');
+  const [showProfileModal, setShowProfileModal] = useState(false); // ✅ CHANGE 3: New state
+
+  // ✅ CHANGE 4: New helper function
+  const getInitials = (name, email) => {
+    if (name) return name.split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2);
+    if (email) return email[0].toUpperCase();
+    return 'U';
+  };
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -23,8 +32,38 @@ export default function UserPortal() {
       <Navbar bg="success" variant="dark" sticky="top">
         <Container>
           <Navbar.Brand>🌾 Smart Paddy Advisor</Navbar.Brand>
-          <Nav className="ms-auto">
-            <span className="text-white me-3">Welcome, {user.email}</span>
+          <Nav className="ms-auto d-flex align-items-center gap-2">
+
+            {/* ✅ CHANGE 5: Replaced <span> with clickable avatar pill */}
+            <div
+              onClick={() => setShowProfileModal(true)}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 10,
+                cursor: 'pointer', padding: '6px 14px', borderRadius: 50,
+                background: 'rgba(255,255,255,0.15)',
+                border: '1px solid rgba(255,255,255,0.3)',
+                transition: 'background 0.2s',
+              }}
+              onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.25)'}
+              onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.15)'}
+              title="View Profile"
+            >
+              <div style={{
+                width: 32, height: 32, borderRadius: '50%',
+                background: 'rgba(255,255,255,0.3)',
+                border: '2px solid rgba(255,255,255,0.7)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 13, fontWeight: 700, color: '#fff', flexShrink: 0,
+              }}>
+                {getInitials(user.name, user.email)}
+              </div>
+              <span style={{ color: '#fff', fontSize: 14, fontWeight: 500 }}>
+                {user.name || user.email}
+              </span>
+              <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12 }}>▾</span>
+            </div>
+            {/* ✅ END CHANGE 5 */}
+
             <Button variant="outline-light" size="sm" onClick={handleLogout}>
               Logout
             </Button>
@@ -32,9 +71,8 @@ export default function UserPortal() {
         </Container>
       </Navbar>
 
-      {/* Main Content */}
+      {/* Main Content — NOTHING CHANGED BELOW UNTIL THE MODAL */}
       <Container className="mt-5">
-        {/* Tab Navigation */}
         <div className="mb-4">
           <Button
             variant={activeTab === 'prediction' ? 'success' : 'outline-success'}
@@ -58,7 +96,6 @@ export default function UserPortal() {
           </Button>
         </div>
 
-        {/* Tab Content */}
         {activeTab === 'prediction' && (
           <Card className="shadow">
             <Card.Header className="bg-success text-white">
@@ -89,6 +126,33 @@ export default function UserPortal() {
           </Card>
         )}
       </Container>
+
+      {/* ✅ CHANGE 6: Profile Modal — added just before closing </> */}
+      <Modal
+        show={showProfileModal}
+        onHide={() => setShowProfileModal(false)}
+        size="lg"
+        centered
+        scrollable
+      >
+        <Modal.Header
+          closeButton
+          style={{
+            background: 'linear-gradient(135deg, #1a6b2f, #2d9e50)',
+            borderBottom: 'none',
+            padding: '16px 24px',
+          }}
+        >
+          <Modal.Title style={{ color: '#fff', fontWeight: 700, fontSize: 18 }}>
+            👤 My Profile
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body style={{ background: '#f8fdf9', padding: '24px' }}>
+          <UserProfile onClose={() => setShowProfileModal(false)} />
+        </Modal.Body>
+      </Modal>
+      {/* ✅ END CHANGE 6 */}
+
     </>
   );
 }

@@ -19,7 +19,11 @@ def register():
     if User.query.filter_by(email=email).first():
         return jsonify({'error': 'Email already registered'}), 400
     
-    user = User(email=email)
+    user = User(
+        email=email,
+        name=data.get('name'),        # ✅ new
+        phone=data.get('phone'),      # ✅ new
+        location=data.get('location'))
     user.set_password(password)
     db.session.add(user)
     db.session.commit()
@@ -61,3 +65,58 @@ def get_current_user():
         return jsonify({'error': 'User not found'}), 404
     
     return jsonify({'user': user.to_dict()}), 200
+
+@auth.route('/change-password', methods=['PUT'])
+@jwt_required()
+def change_password():
+    """Change user password"""
+    user_id = get_jwt_identity()
+    user = User.query.get(user_id)
+
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+
+    data = request.get_json() or {}
+    current_password = data.get('currentPassword')
+    new_password = data.get('newPassword')
+
+    if not current_password or not new_password:
+        return jsonify({'error': 'Current and new password are required'}), 400
+
+    if not user.check_password(current_password):
+        return jsonify({'error': 'Current password is incorrect'}), 401
+
+    if len(new_password) < 6:
+        return jsonify({'error': 'New password must be at least 6 characters'}), 400
+
+    user.set_password(new_password)
+    db.session.commit()
+
+    return jsonify({'message': 'Password changed successfully'}), 200
+
+
+@auth.route('/update-profile', methods=['PUT'])
+@jwt_required()
+def update_profile():
+    """Update user profile"""
+    user_id = get_jwt_identity()
+    user = User.query.get(user_id)
+
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+
+    data = request.get_json() or {}
+    
+    if 'name' in data:
+        user.name = data.get('name')
+    if 'phone' in data:
+        user.phone = data.get('phone')
+    if 'location' in data:
+        user.location = data.get('location')
+
+    db.session.commit()
+
+    return jsonify({
+        'message': 'Profile updated successfully',
+        'user': user.to_dict()
+    }), 200
