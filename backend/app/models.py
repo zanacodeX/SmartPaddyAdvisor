@@ -12,6 +12,9 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
+    name = db.Column(db.String(100), nullable=True)
+    phone = db.Column(db.String(20), nullable=True)
+    location = db.Column(db.String(100), nullable=True)
     role = db.Column(db.String(20), default='user')  # 'user' or 'admin'
     
     def set_password(self, password):
@@ -27,6 +30,9 @@ class User(db.Model):
         return {
             'id': self.id,
             'email': self.email,
+            'name': self.name,
+            'phone': self.phone,
+            'location': self.location,
             'role': self.role
         }
 

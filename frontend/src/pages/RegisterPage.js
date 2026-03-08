@@ -1,16 +1,25 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Container, Card, Form, Button, Alert } from 'react-bootstrap';
+import { Container, Card, Form, Button, Alert, Row, Col } from 'react-bootstrap'; // ✅ added Row, Col
 import axiosInstance from '../api/axiosInstance';
 
 export default function RegisterPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [formData, setFormData] = useState({   // ✅ unified state
+    email: '',
+    password: '',
+    confirmPassword: '',
+    name: '',
+    phone: '',
+    location: '',
+  });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,14 +27,20 @@ export default function RegisterPage() {
     setSuccess('');
     setLoading(true);
 
-    if (password !== confirmPassword) {
+    if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
       setLoading(false);
       return;
     }
 
     try {
-      await axiosInstance.post('/auth/register', { email, password });
+      await axiosInstance.post('/auth/register', {
+        email: formData.email,
+        password: formData.password,
+        name: formData.name,           // ✅ new
+        phone: formData.phone,         // ✅ new
+        location: formData.location,   // ✅ new
+      });
       setSuccess('Registration successful! Redirecting to login...');
       setTimeout(() => navigate('/login'), 2000);
     } catch (err) {
@@ -37,8 +52,8 @@ export default function RegisterPage() {
 
   return (
     <Container className="d-flex justify-content-center align-items-center min-vh-100">
-      <Card className="shadow-lg" style={{ width: '400px' }}>
-        <Card.Body>
+      <Card className="shadow-lg" style={{ width: '480px' }}>  {/* ✅ slightly wider for new fields */}
+        <Card.Body className="p-4">
           <h2 className="text-center mb-1 text-success">🌾 Smart Paddy Advisor</h2>
           <p className="text-center text-muted mb-4">Create your account</p>
 
@@ -46,34 +61,82 @@ export default function RegisterPage() {
           {success && <Alert variant="success">{success}</Alert>}
 
           <Form onSubmit={handleSubmit}>
+
+            {/* ✅ NEW: Full Name */}
+            <Form.Group className="mb-3">
+              <Form.Label>Full Name</Form.Label>
+              <Form.Control
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                placeholder="Enter your full name"
+              />
+            </Form.Group>
+
+            {/* Email — unchanged */}
             <Form.Group className="mb-3">
               <Form.Label>Email</Form.Label>
               <Form.Control
                 type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
                 required
                 placeholder="Enter email"
               />
             </Form.Group>
 
+            {/* ✅ NEW: Phone + Location side by side */}
+            <Row>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Contact Number</Form.Label>
+                  <Form.Control
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    placeholder="+94 XX XXX XXXX"
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Location</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="location"
+                    value={formData.location}
+                    onChange={handleChange}
+                    placeholder="District / Province"
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
+
+            {/* Password — name attr added */}
             <Form.Group className="mb-3">
               <Form.Label>Password</Form.Label>
               <Form.Control
                 type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
                 required
                 placeholder="Enter password"
               />
             </Form.Group>
 
+            {/* Confirm Password — name attr added */}
             <Form.Group className="mb-3">
               <Form.Label>Confirm Password</Form.Label>
               <Form.Control
                 type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
                 required
                 placeholder="Confirm password"
               />
