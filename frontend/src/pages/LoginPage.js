@@ -5,7 +5,7 @@ import axiosInstance from '../api/axiosInstance';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('admin@example.com');
-  const [password, setPassword] = useState('Password123');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();

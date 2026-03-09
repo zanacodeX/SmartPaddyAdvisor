@@ -14,7 +14,7 @@ export default function LandingPage() {
   };
 
   return (
-    <>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       {/* Header / Navbar */}
       <Navbar bg="success" variant="dark" expand="lg" sticky="top">
         <Container>
@@ -35,7 +35,7 @@ export default function LandingPage() {
       </Navbar>
 
       {/* Hero section */}
-      <Container className="text-center my-5">
+      <Container className="text-center my-5" style={{ flex: 1 }}>
         <h1>Welcome to Smart Paddy Advisor</h1>
         <p>Your AI powered tool for optimal paddy yield prediction and advice.</p>
         <Button variant="success" size="lg" onClick={handleRegister}>
@@ -50,6 +50,6 @@ export default function LandingPage() {
           <small>© {new Date().getFullYear()} Smart Paddy Advisor. All rights reserved.</small>
         </Container>
       </footer>
-    </>
+      </div>
   );
 }

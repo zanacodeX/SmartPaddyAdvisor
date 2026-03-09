@@ -70,7 +70,7 @@ const getStages = (h) => [
     emoji: "💧",
     color: stageColors[4],
     fields: [
-      { label: "Water Mgmt Advice (Stage 4)", value: h.water_management_advice_stage4 },
+      { label: "Water Management Advice (Stage 4)", value: h.water_management_advice_stage4 },
       { label: "Tiller Increase Tip", value: h.tiller_increase_tip },
       { label: "2nd Dose Urea (kg)", value: h.fertilizer_2nddose_urea_kg },
       { label: "2nd Dose TSP (kg)", value: h.fertilizer_2nddose_tsp_kg },
