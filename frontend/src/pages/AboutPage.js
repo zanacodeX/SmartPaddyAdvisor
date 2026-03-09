@@ -55,11 +55,11 @@ export default function AboutPage() {
           We leverage machine learning algorithms to analyze various factors including:
         </p>
         <ul>
-          <li>Weather patterns and climate conditions</li>
+          <li>Predict yield Results </li>
           <li>Soil composition and nutrients</li>
-          <li>Historical crop data</li>
+          <li>Historical Predict data save and view </li>
           <li>Farming practices and techniques</li>
-          <li>Market trends and pricing</li>
+          <li>Detect disease Using Images</li>
         </ul>
 
         <h2 className="mt-5">Our Vision</h2>
