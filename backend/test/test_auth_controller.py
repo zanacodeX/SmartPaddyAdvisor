@@ -1,14 +1,5 @@
 """
-tests/test_auth_controller.py
-==============================
-Fix: The previous version tried to call create_app() which connects to MySQL.
-Solution: Build a FRESH minimal Flask app in the fixture — never call create_app().
-          This means zero MySQL dependency. All tests run with SQLite in-memory.
 
-Patch paths match your layout:
-    app/controller/auth_controller.py  imports:
-        from .. import db          -> app.controller.auth_controller.db
-        from ..models import User  -> app.controller.auth_controller.User
 """
 
 import pytest
@@ -19,21 +10,11 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager, create_access_token
 
 
-# =============================================================================
 # FIXTURES
-# =============================================================================
 
 @pytest.fixture(scope='session')
 def app():
-    """
-    Build a brand-new minimal Flask app — completely independent of create_app().
-
-    WHY: create_app() hard-wires MySQL. Calling it (even with env overrides)
-    triggers a real TCP connection before our mocks are active.
-
-    HOW: We create a throwaway Flask app, register ONLY the auth blueprint,
-    and use SQLite in-memory so no database server is needed at all.
-    """
+    
     flask_app = Flask(__name__)
     flask_app.config['TESTING']                      = True
     flask_app.config['JWT_SECRET_KEY']               = 'test-secret-key-for-pytest'
@@ -46,7 +27,7 @@ def app():
     # Wire up SQLAlchemy to the test app so the blueprint import works
     test_db = SQLAlchemy(flask_app)
 
-    # ── Patch db + User BEFORE importing the blueprint ──────────────────────
+    # ── Patch db + User BEFORE importing the blueprint 
     # This stops the blueprint from touching any real database at import time.
     with patch('app.controller.auth_controller.db',   new=MagicMock()), \
          patch('app.controller.auth_controller.User', new=MagicMock()):
@@ -81,9 +62,7 @@ def auth_headers(token):
     }
 
 
-# =============================================================================
 # MOCK USER FACTORY
-# =============================================================================
 
 def make_mock_user(
     user_id     = 1,
@@ -94,14 +73,7 @@ def make_mock_user(
     role        = 'user',
     password_ok = True,
 ):
-    """
-    Returns a MagicMock that behaves exactly like a real User model instance.
-    Pre-wires every attribute and method that auth_controller.py touches.
-
-    Usage:
-        user = make_mock_user(password_ok=False)
-        MockUser.query.get.return_value = user
-    """
+    
     user = MagicMock(name='MockUser')
     user.id       = user_id
     user.email    = email
@@ -128,9 +100,7 @@ def make_mock_user(
     return user
 
 
-# =============================================================================
 # REQUEST HELPERS
-# =============================================================================
 
 def post_json(client, url, data, headers=None):
     """POST request with a JSON body."""
@@ -150,17 +120,13 @@ def put_json(client, url, data, headers):
     )
 
 
-# =============================================================================
 # SHARED PATCH PATHS  ← update these if your folder/file names differ
-# =============================================================================
 
 USER_PATH = 'app.controller.auth_controller.User'
 DB_PATH   = 'app.controller.auth_controller.db'
 
 
-# =============================================================================
 # TEST 1 — POST /auth/register
-# =============================================================================
 
 class TestRegister:
 
@@ -260,9 +226,7 @@ class TestRegister:
             user_instance.set_password.assert_called_once_with('myplaintext')
 
 
-# =============================================================================
 # TEST 2 — POST /auth/login
-# =============================================================================
 
 class TestLogin:
 
@@ -356,9 +320,7 @@ class TestLogin:
             mock_jwt.assert_called_once_with(identity='42')
 
 
-# =============================================================================
 # TEST 3 — GET /auth/me
-# =============================================================================
 
 class TestGetCurrentUser:
 
@@ -405,9 +367,7 @@ class TestGetCurrentUser:
             assert 'User not found' in resp.get_json()['error']
 
 
-# =============================================================================
 # TEST 4 — PUT /auth/change-password
-# =============================================================================
 
 class TestChangePassword:
 
@@ -515,9 +475,7 @@ class TestChangePassword:
             assert 'User not found' in resp.get_json()['error']
 
 
-# =============================================================================
 # TEST 5 — PUT /auth/update-profile
-# =============================================================================
 
 class TestUpdateProfile:
 

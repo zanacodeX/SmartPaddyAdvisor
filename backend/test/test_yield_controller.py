@@ -1,20 +1,5 @@
 """
-tests/test_yield_controller.py
-================================
-Pure Mock-based Unit Tests for yield_controller.py
 
-Routes tested:
-    POST /predict                       - get_prediction_results (no auth)
-    POST /api/save_prediction           - save to DB (no auth)
-    DELETE /api/predictions/<id>        - delete prediction (no auth)
-    GET  /api/predictions               - get history (JWT optional)
-
-Patch paths:
-    app.controller.yield_controller.get_prediction_results
-    app.controller.yield_controller.get_user_predictions
-    app.controller.yield_controller.db
-    app.controller.yield_controller.User
-    app.controller.yield_controller.Prediction
 """
 
 import pytest
@@ -24,9 +9,7 @@ from flask import Flask
 from flask_jwt_extended import JWTManager, create_access_token
 
 
-# =============================================================================
 # PATCH PATHS  — match exact imports in yield_controller.py
-# =============================================================================
 
 GET_PREDICTION_PATH  = 'app.controller.yield_controller.get_prediction_results'
 GET_USER_PRED_PATH   = 'app.controller.yield_controller.get_user_predictions'
@@ -35,9 +18,7 @@ USER_PATH            = 'app.controller.yield_controller.User'
 PREDICTION_PATH      = 'app.controller.yield_controller.Prediction'
 
 
-# =============================================================================
 # FIXTURES
-# =============================================================================
 
 @pytest.fixture(scope='session')
 def app():
@@ -84,9 +65,7 @@ def auth_headers(token):
     }
 
 
-# =============================================================================
 # HELPERS
-# =============================================================================
 
 def post_json(client, url, data, headers=None):
     return client.post(
@@ -149,9 +128,7 @@ def make_mock_prediction(pred_id=1, user_id=1):
     return pred
 
 
-# =============================================================================
 # TEST 1 — POST /predict
-# =============================================================================
 
 class TestPredict:
     """
@@ -254,14 +231,11 @@ class TestPredict:
             mock_predict.assert_not_called()
 
 
-# =============================================================================
 # TEST 2 — POST /api/save_prediction
-# =============================================================================
 
 class TestSavePrediction:
     """
-    Saves a prediction to DB.
-    Mocks: User.query.get, Prediction constructor, db.session
+    
     """
 
     def test_save_prediction_success(self, client):
@@ -347,9 +321,7 @@ class TestSavePrediction:
             MockUser.query.get.assert_called_once_with(5)
 
 
-# =============================================================================
 # TEST 3 — DELETE /api/predictions/<id>
-# =============================================================================
 
 class TestDeletePrediction:
     """
@@ -409,9 +381,7 @@ class TestDeletePrediction:
             mock_db.session.commit.assert_not_called()
 
 
-# =============================================================================
 # TEST 4 — GET /api/predictions
-# =============================================================================
 
 class TestGetPredictions:
     """

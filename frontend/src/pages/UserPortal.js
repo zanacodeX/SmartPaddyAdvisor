@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container, Navbar, Nav, Button, Card, Alert, Form, Modal } from 'react-bootstrap'; // ✅ CHANGE 1: Added Modal
+import { Container, Navbar, Nav, Button, Card, Alert, Form, Modal } from 'react-bootstrap'; 
 import axiosInstance from '../api/axiosInstance';
 import PredictionForm from '../component/PredictionForm'; 
 import PredictionHistory from "../component/PredictionHistory";
 import DiseaseDetection from '../component/DiseaseDetection';
-import UserProfile from '../component/UserProfile'; // ✅ CHANGE 2: New import
+import UserProfile from '../component/UserProfile'; 
 
 export default function UserPortal() {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   const [activeTab, setActiveTab] = useState('prediction');
-  const [showProfileModal, setShowProfileModal] = useState(false); // ✅ CHANGE 3: New state
+  const [showProfileModal, setShowProfileModal] = useState(false); 
 
-  // ✅ CHANGE 4: New helper function
+  
   const getInitials = (name, email) => {
     if (name) return name.split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2);
     if (email) return email[0].toUpperCase();
@@ -34,7 +34,7 @@ export default function UserPortal() {
           <Navbar.Brand>🌾 Smart Paddy Advisor</Navbar.Brand>
           <Nav className="ms-auto d-flex align-items-center gap-2">
 
-            {/* ✅ CHANGE 5: Replaced <span> with clickable avatar pill */}
+            {/* Replaced <span> with clickable avatar pill */}
             <div
               onClick={() => setShowProfileModal(true)}
               style={{
@@ -62,7 +62,7 @@ export default function UserPortal() {
               </span>
               <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12 }}>▾</span>
             </div>
-            {/* ✅ END CHANGE 5 */}
+            {/* */}
 
             <Button variant="outline-light" size="sm" onClick={handleLogout}>
               Logout
@@ -71,7 +71,7 @@ export default function UserPortal() {
         </Container>
       </Navbar>
 
-      {/* Main Content — NOTHING CHANGED BELOW UNTIL THE MODAL */}
+      {/* Main Content  */}
       <Container className="mt-5">
         <div className="mb-4">
           <Button
@@ -127,7 +127,7 @@ export default function UserPortal() {
         )}
       </Container>
 
-      {/* ✅ CHANGE 6: Profile Modal — added just before closing </> */}
+      {/*Profile Modal  </> */}
       <Modal
         show={showProfileModal}
         onHide={() => setShowProfileModal(false)}
@@ -151,7 +151,7 @@ export default function UserPortal() {
           <UserProfile onClose={() => setShowProfileModal(false)} />
         </Modal.Body>
       </Modal>
-      {/* ✅ END CHANGE 6 */}
+      {/**/}
 
     </>
   );

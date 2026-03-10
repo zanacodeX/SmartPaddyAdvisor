@@ -4,7 +4,7 @@ import { Button, Modal, Spinner } from "react-bootstrap";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
-/* ── inline styles / design tokens ── */
+/* ── inline styles  ── */
 const TOKEN = {
   green900: "#0d3d1a",
   green700: "#1a6b2f",
@@ -28,7 +28,7 @@ const stageColors = {
   7: [230, 81, 0],
 };
 
-/* ── stage builder ── */
+/*  stage builder  */
 const getStages = (h) => [
   {
     stage: "Stage 1 — Land Preparation",
@@ -94,7 +94,7 @@ const getStages = (h) => [
   },
 ];
 
-/* ── PDF generator ── */
+/*  PDF generator  */
 const generatePDF = (h) => {
   const doc = new jsPDF();
   const user = JSON.parse(localStorage.getItem("user") || "{}");
@@ -210,7 +210,7 @@ export default function PredictionHistory() {
     }
   };
 
-  /* ── loading state ── */
+  /*  loading state  */
   if (loading) return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: 260 }}>
       <div style={{
@@ -233,7 +233,7 @@ export default function PredictionHistory() {
     </div>
   );
 
-  /* ── empty state ── */
+  /*  empty state  */
   if (history.length === 0) return (
     <div style={{ textAlign: "center", padding: "60px 20px" }}>
       <div style={{ fontSize: 56, marginBottom: 12 }}>🌾</div>
@@ -244,7 +244,7 @@ export default function PredictionHistory() {
     </div>
   );
 
-  /* ── main render ── */
+  /*  main render  */
   return (
     <div style={{ fontFamily: "'Georgia', serif" }}>
       <style>{`
@@ -283,7 +283,7 @@ export default function PredictionHistory() {
         }
       `}</style>
 
-      {/* ── Header bar ── */}
+      {/*  Header bar  */}
       <div style={{
         display: "flex", justifyContent: "space-between", alignItems: "center",
         marginBottom: 24, paddingBottom: 14,
@@ -308,7 +308,7 @@ export default function PredictionHistory() {
         </div>
       </div>
 
-      {/* ── Cards ── */}
+      {/*  Cards */}
       {history.map((h, i) => (
         <div
           key={h.id || i}

@@ -4,9 +4,9 @@ import os
 from app.models import Prediction
 from app import db
 
-# -----------------------------
+
 # Load trained models once
-# -----------------------------
+
 MODEL_FOLDER = os.path.join(os.path.dirname(__file__), "..","..", "model")
 
 model_numeric = joblib.load(os.path.join(MODEL_FOLDER, "paddy_model_numeric.pkl"))
@@ -14,9 +14,9 @@ model_text = joblib.load(os.path.join(MODEL_FOLDER, "paddy_model_text.pkl"))
 label_encoders = joblib.load(os.path.join(MODEL_FOLDER, "label_encoders.pkl"))
 scaler = joblib.load(os.path.join(MODEL_FOLDER, "scaler.pkl"))
 
-# -----------------------------
+
 # Fertilizer calculation
-# -----------------------------
+
 def calculate_fertilizer(ph, area_ha):
     tsp_rate = 50 if ph < 6.5 else 40
     mop_rate = 25
@@ -27,16 +27,11 @@ def calculate_fertilizer(ph, area_ha):
         "Urea_kg": round(urea_rate * area_ha, 2)
     }
 
-# -----------------------------
+
 # Main prediction function
-# -----------------------------
+
 def get_prediction_results(data):
-    """
-    Input: dictionary from frontend
-    Output: numeric + text + fertilizer predictions
-    This function validates inputs, scales them, and handles varying model output shapes
-    to avoid runtime errors that lead to 500 responses.
-    """
+    
     required_keys = ["temperature", "soil_ph", "rainfall", "field_area", "humidity"]
     for k in required_keys:
         if k not in data:
@@ -140,5 +135,5 @@ def get_user_predictions(user_id):
 
     except Exception as e:
         db.session.rollback()
-        print("🔥 Error in get_user_predictions:", e)
+        print(" Error in get_user_predictions:", e)
         raise e
