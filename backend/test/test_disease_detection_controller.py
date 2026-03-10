@@ -1,17 +1,5 @@
 """
-tests/test_disease_detection_controller.py
-==========================================
-Pure Mock-based Unit Tests for disease_detection_controller.py
 
-Patch paths:
-    app.controller.disease_detection_controller.predict_disease
-    app.controller.disease_detection_controller.get_disease_info
-
-Routes tested:
-    GET  /api/health
-    POST /api/disease-detection-test   (no JWT)
-    POST /api/disease-detection        (JWT required)
-    GET  /api/disease-info/<name>      (JWT required)
 """
 
 import pytest
@@ -22,9 +10,7 @@ from flask import Flask
 from flask_jwt_extended import JWTManager, create_access_token
 
 
-# =============================================================================
 # PATCH PATHS
-# =============================================================================
 
 PREDICT_PATH      = 'app.controller.disease_detection_controller.predict_disease'
 DISEASE_INFO_PATH = 'app.controller.disease_detection_controller.get_disease_info'
@@ -32,9 +18,7 @@ OS_REMOVE_PATH    = 'app.controller.disease_detection_controller.os.remove'
 OS_PATH_JOIN_PATH = 'app.controller.disease_detection_controller.os.path.join'
 
 
-# =============================================================================
 # FIXTURES
-# =============================================================================
 
 @pytest.fixture(scope='session')
 def app():
@@ -78,9 +62,7 @@ def auth_headers(token):
     return {'Authorization': f'Bearer {token}'}
 
 
-# =============================================================================
 # HELPER — build a fake image upload
-# =============================================================================
 
 def make_image_upload(filename='leaf.jpg', content=b'fake-image-bytes'):
     """
@@ -117,9 +99,7 @@ def make_disease_info(disease='Bacterial Leaf Blight'):
     }
 
 
-# =============================================================================
 # TEST 1 — GET /api/health
-# =============================================================================
 
 class TestHealthCheck:
     """
@@ -151,9 +131,7 @@ class TestHealthCheck:
         assert 'DiseaseAPI' in body.get('status', '')
 
 
-# =============================================================================
 # TEST 2 — POST /api/disease-detection-test  (no JWT)
-# =============================================================================
 
 class TestDetectDiseaseTest:
     """
@@ -161,7 +139,7 @@ class TestDetectDiseaseTest:
     Mocks: predict_disease, get_disease_info, os.remove, file.save
     """
 
-    # ── PASS cases ────────────────────────────────────────────────────────────
+    # ── PASS cases 
 
     def test_detect_test_success(self, client):
         """Valid image upload + successful prediction -> 200 with result."""
@@ -272,7 +250,7 @@ class TestDetectDiseaseTest:
             # get_disease_info must NOT be called when prediction fails
             mock_info.assert_not_called()
 
-    # ── FAIL cases ────────────────────────────────────────────────────────────
+    # ── FAIL cases 
 
     def test_detect_test_no_image_field(self, client):
         """Request without 'image' field -> 400."""
@@ -338,9 +316,7 @@ class TestDetectDiseaseTest:
             assert resp.get_json()['success'] == True
 
 
-# =============================================================================
 # TEST 3 — POST /api/disease-detection  (JWT required)
-# =============================================================================
 
 class TestDetectDisease:
     """
@@ -348,7 +324,7 @@ class TestDetectDisease:
     Mirrors TestDetectDiseaseTest but adds auth-related tests.
     """
 
-    # ── PASS cases ────────────────────────────────────────────────────────────
+    # ── PASS cases 
 
     def test_detect_success(self, client, auth_headers):
         """Valid token + image -> 200 with prediction result and info."""
@@ -466,7 +442,7 @@ class TestDetectDisease:
             assert resp.status_code == 200
             assert resp.get_json()['success'] == True
 
-    # ── FAIL cases ────────────────────────────────────────────────────────────
+    # ── FAIL cases 
 
     def test_detect_no_token(self, client):
         """No JWT -> 401 before any logic runs."""
@@ -540,9 +516,7 @@ class TestDetectDisease:
             mock_info.assert_not_called()
 
 
-# =============================================================================
 # TEST 4 — GET /api/disease-info/<disease_name>  (JWT required)
-# =============================================================================
 
 class TestGetDiseaseDetails:
     """
@@ -550,7 +524,7 @@ class TestGetDiseaseDetails:
     Mocks: get_disease_info
     """
 
-    # ── PASS cases ────────────────────────────────────────────────────────────
+    # ── PASS cases 
 
     def test_get_disease_info_success(self, client, auth_headers):
         """Known disease name -> 200 with disease + info keys."""
@@ -590,7 +564,7 @@ class TestGetDiseaseDetails:
             assert resp.status_code == 200
             assert resp.get_json()['disease'] == 'Leaf Smut'
 
-    # ── FAIL cases ────────────────────────────────────────────────────────────
+    # ── FAIL cases 
 
     def test_get_disease_info_not_found(self, client, auth_headers):
         """Unknown disease name -> get_disease_info returns None -> 404."""

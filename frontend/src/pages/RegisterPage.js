@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Container, Card, Form, Button, Alert, Row, Col } from 'react-bootstrap'; // ✅ added Row, Col
+import { Container, Card, Form, Button, Alert, Row, Col } from 'react-bootstrap'; 
 import axiosInstance from '../api/axiosInstance';
 
 export default function RegisterPage() {
-  const [formData, setFormData] = useState({   // ✅ unified state
+  const [formData, setFormData] = useState({   
     email: '',
     password: '',
     confirmPassword: '',
@@ -37,9 +37,9 @@ export default function RegisterPage() {
       await axiosInstance.post('/auth/register', {
         email: formData.email,
         password: formData.password,
-        name: formData.name,           // ✅ new
-        phone: formData.phone,         // ✅ new
-        location: formData.location,   // ✅ new
+        name: formData.name,           
+        phone: formData.phone,         
+        location: formData.location,   
       });
       setSuccess('Registration successful! Redirecting to login...');
       setTimeout(() => navigate('/login'), 2000);
@@ -52,7 +52,7 @@ export default function RegisterPage() {
 
   return (
     <Container className="d-flex justify-content-center align-items-center min-vh-100">
-      <Card className="shadow-lg" style={{ width: '480px' }}>  {/* ✅ slightly wider for new fields */}
+      <Card className="shadow-lg" style={{ width: '480px' }}>  {/*  */}
         <Card.Body className="p-4">
           <h2 className="text-center mb-1 text-success">🌾 Smart Paddy Advisor</h2>
           <p className="text-center text-muted mb-4">Create your account</p>
@@ -62,7 +62,7 @@ export default function RegisterPage() {
 
           <Form onSubmit={handleSubmit}>
 
-            {/* ✅ NEW: Full Name */}
+            {/* Full Name */}
             <Form.Group className="mb-3">
               <Form.Label>Full Name</Form.Label>
               <Form.Control
@@ -88,7 +88,7 @@ export default function RegisterPage() {
               />
             </Form.Group>
 
-            {/* ✅ NEW: Phone + Location side by side */}
+            {/*Phone + Location side by side */}
             <Row>
               <Col md={6}>
                 <Form.Group className="mb-3">

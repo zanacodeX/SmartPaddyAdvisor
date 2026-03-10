@@ -87,21 +87,17 @@ def delete_prediction(prediction_id):
 
 @api.route('/api/predictions', methods=['GET'])
 def get_predictions():
-    """
-    Fetch prediction history:
-    - If JWT is provided, uses logged-in user ID
-    - Otherwise, allows user_id from query param
-    """
+    
     try:
         user_id = None
 
-        # 1️⃣ Try JWT first
+        # Try JWT first
         try:
             user_id = get_jwt_identity()
         except Exception:
             pass  # JWT not provided or invalid
 
-        # 2️⃣ Fallback: query param
+        # Fallback: query param
         if not user_id:
             user_id = request.args.get("user_id")
 
@@ -119,5 +115,5 @@ def get_predictions():
         return jsonify([p.to_dict() for p in predictions]), 200
 
     except Exception as e:
-        print("🔥 Error fetching predictions:", e)
+        print(" Error fetching predictions:", e)
         return jsonify({"error": "Failed to load predictions."}), 500

@@ -407,7 +407,7 @@ export default function AdminPortal() {
                                   : u.role === 'admin' ? '⬇️ Make User' : '⬆️ Make Admin'}
                               </button>
                             )}
-                            {/* Edit button — add this first in the actions div */}
+                            {/* Edit button  */}
                               <button
                                 className="action-btn"
                                 style={{ background: TOKEN.green100, color: TOKEN.green700, border: `1px solid ${TOKEN.borderLight}` }}

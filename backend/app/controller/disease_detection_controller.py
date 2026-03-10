@@ -39,7 +39,7 @@ def detect_disease_test():
             logger.error("File is empty or has no filename")
             return jsonify({"error": "Invalid file", "success": False}), 400
         
-        # Save to temporary directory (Windows-compatible)
+        # Save to temporary directory 
         temp_dir = tempfile.gettempdir()
         temp_path = os.path.join(temp_dir, file.filename)
         logger.info(f"Saving to temp path: {temp_path}")
@@ -79,10 +79,7 @@ def detect_disease_test():
 @api.route("/disease-detection", methods=["POST"])
 @jwt_required()
 def detect_disease():
-    """
-    Endpoint to detect rice leaf disease from an image
-    Expected: file upload via multipart/form-data
-    """
+    
     try:
         logger.info("=== Disease Detection Request Started ===")
         logger.info(f"Request headers: {dict(request.headers)}")
@@ -104,7 +101,7 @@ def detect_disease():
             logger.error("File is empty or has no filename")
             return jsonify({"error": "Invalid file", "success": False}), 400
         
-        # Save to temporary directory (Windows-compatible)
+        # Save to temporary directory 
         temp_dir = tempfile.gettempdir()
         temp_path = os.path.join(temp_dir, file.filename)
         logger.info(f"Saving to temp path: {temp_path}")
