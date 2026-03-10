@@ -1,0 +1,354 @@
+/* ══════════════════════════════════════
+   Detection.css — Smart Paddy Advisor
+   Matches PredictionForm + History style
+══════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&display=swap');
+
+:root {
+  --green-900: #0d3d1a;
+  --green-700: #1a6b2f;
+  --green-500: #2d9e50;
+  --green-300: #52c878;
+  --green-100: #e8f5ec;
+  --green-50:  #f4fbf6;
+  --orange:    #e65100;
+  --blue-dark: #01579b;
+  --blue-mid:  #0277bd;
+  --ink:       #1a2420;
+  --muted:     #607060;
+  --border:    #cce5d4;
+  --white:     #ffffff;
+  --danger:    #c62828;
+  --warn:      #f57c00;
+}
+
+/* ── Container ── */
+.detection-container {
+  padding: 8px 0 30px;
+  font-family: 'Georgia', serif;
+}
+
+.detection-container h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--green-900);
+  letter-spacing: 0.3px;
+  margin-bottom: 4px;
+}
+
+.detection-container > .mb-4 > .col > p.text-muted {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* ── Upload Card override ── */
+.detection-container .card {
+  border: 1px solid var(--border) !important;
+  border-radius: 14px !important;
+  overflow: hidden;
+  box-shadow: 0 4px 18px rgba(27, 94, 32, 0.08) !important;
+  margin-bottom: 0;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.detection-container .card:hover {
+  box-shadow: 0 8px 28px rgba(27, 94, 32, 0.13) !important;
+  transform: translateY(-2px);
+}
+
+/* top accent bar on every card */
+.detection-container .card::before {
+  content: '';
+  display: block;
+  height: 3px;
+  background: linear-gradient(90deg, var(--green-700), var(--green-300));
+}
+
+.detection-container .card-header {
+  font-family: 'Georgia', serif;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.3px;
+  padding: 14px 20px;
+  border-bottom: none;
+}
+
+.detection-container .card-header.bg-success {
+  background: linear-gradient(135deg, var(--green-900), var(--green-700)) !important;
+  color: var(--white) !important;
+}
+
+.detection-container .card-header.bg-info {
+  background: linear-gradient(135deg, var(--blue-dark), var(--blue-mid)) !important;
+  color: var(--white) !important;
+}
+
+.detection-container .card-body {
+  padding: 20px 22px;
+  background: var(--white);
+}
+
+/* ── Dropzone ── */
+.dropzone {
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  padding: 40px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  background: var(--green-50);
+  min-height: 240px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.dropzone:hover {
+  border-color: var(--green-500);
+  background: var(--green-100);
+  box-shadow: 0 0 0 4px rgba(45, 158, 80, 0.1);
+}
+
+.dropzone p {
+  margin: 8px 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-family: 'Georgia', serif;
+}
+
+.dropzone p.large {
+  font-size: 52px;
+  margin: 0 0 10px 0;
+  line-height: 1;
+}
+
+/* ── Preview image ── */
+.preview-image {
+  max-width: 100%;
+  max-height: 230px;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(27, 94, 32, 0.15);
+  border: 2px solid var(--border);
+  object-fit: cover;
+}
+
+/* ── Choose file label button ── */
+label[for="file-input"].btn.btn-outline-secondary {
+  border: 1.5px solid var(--border);
+  color: var(--muted);
+  border-radius: 10px;
+  font-family: 'Georgia', serif;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 9px 16px;
+  background: var(--green-50);
+  transition: all 0.2s;
+  letter-spacing: 0.3px;
+}
+
+label[for="file-input"].btn.btn-outline-secondary:hover {
+  background: var(--green-100);
+  border-color: var(--green-500);
+  color: var(--green-700);
+  transform: translateY(-1px);
+}
+
+/* ── Detect button ── */
+.detection-container .btn-success {
+  background: linear-gradient(135deg, var(--green-700), var(--green-500)) !important;
+  border: none !important;
+  border-radius: 10px !important;
+  font-family: 'Georgia', serif !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  padding: 11px 20px !important;
+  letter-spacing: 0.3px;
+  box-shadow: 0 4px 14px rgba(27, 94, 32, 0.3);
+  transition: all 0.2s ease !important;
+}
+
+.detection-container .btn-success:hover:not(:disabled) {
+  filter: brightness(1.08);
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 18px rgba(27, 94, 32, 0.35) !important;
+}
+
+.detection-container .btn-success:disabled {
+  background: linear-gradient(135deg, var(--muted), #8a9e8a) !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+/* ── Reset button ── */
+.detection-container .btn-outline-secondary {
+  border: 1.5px solid var(--border) !important;
+  color: var(--muted) !important;
+  border-radius: 10px !important;
+  font-family: 'Georgia', serif !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  background: var(--white) !important;
+  transition: all 0.2s !important;
+}
+
+.detection-container .btn-outline-secondary:hover {
+  background: var(--green-50) !important;
+  border-color: var(--green-500) !important;
+  color: var(--green-700) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* ── Results card sections ── */
+.detection-container .card-body h4 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 6px;
+}
+
+.detection-container .card-body h3.text-danger {
+  color: var(--danger) !important;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Section blocks inside results */
+.detection-container .card-body > div.mb-3 {
+  background: var(--green-50);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 12px !important;
+}
+
+.detection-container .card-body h6 {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 8px;
+}
+
+.detection-container .card-body p {
+  font-size: 13.5px;
+  color: var(--ink);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ── Lists (symptoms / treatment / prevention) ── */
+.detection-container ul {
+  padding-left: 0;
+  list-style: none;
+  margin: 0;
+}
+
+.detection-container ul li {
+  position: relative;
+  padding: 6px 0 6px 20px;
+  font-size: 13px;
+  color: var(--ink);
+  border-bottom: 1px solid var(--border);
+  line-height: 1.5;
+}
+
+.detection-container ul li:last-child {
+  border-bottom: none;
+}
+
+.detection-container ul li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--green-500);
+  font-size: 11px;
+  top: 7px;
+}
+
+/* ── Confidence badge ── */
+.detection-container .badge {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  padding: 5px 12px !important;
+  border-radius: 20px !important;
+  letter-spacing: 0.3px;
+}
+
+.detection-container .badge.bg-success { background: var(--green-700) !important; }
+.detection-container .badge.bg-warning  { background: var(--warn) !important; color: #fff !important; }
+.detection-container .badge.bg-danger   { background: var(--danger) !important; }
+
+/* ── Confidence label row ── */
+.detection-container .mb-3 p strong {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  color: var(--muted);
+}
+
+/* ── Empty state card ── */
+.detection-container .text-center.text-muted .card-body {
+  background: var(--green-50);
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.detection-container .text-center.text-muted p {
+  color: var(--muted);
+  font-size: 14px;
+  font-family: 'Georgia', serif;
+}
+
+/* ── Error alert ── */
+.detection-container .alert-danger {
+  background: #fff5f5;
+  border: 1px solid #ffcdd2;
+  color: var(--danger);
+  border-radius: 10px;
+  font-size: 13px;
+  font-family: 'Georgia', serif;
+}
+
+/* ── Spinner ── */
+.detection-container .spinner-border {
+  width: 16px;
+  height: 16px;
+  border-width: 2.5px;
+  border-color: rgba(255,255,255,0.4);
+  border-top-color: #fff;
+}
+
+/* ── Fade-in animation ── */
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.detection-container .card {
+  animation: fadeSlideIn 0.35s ease both;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .dropzone {
+    padding: 28px 14px;
+    min-height: 190px;
+  }
+  .dropzone p.large { font-size: 40px; }
+  .preview-image { max-height: 190px; }
+  .detection-container { padding: 10px 0; }
+  .detection-container .card-body { padding: 14px 16px; }
+}
