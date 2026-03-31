@@ -114,7 +114,7 @@ export default function AdminPortal() {
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    navigate('/login');
+    navigate('/');
   };
 
   const filtered = users.filter(u =>
